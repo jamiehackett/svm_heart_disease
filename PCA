@@ -1,0 +1,100 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.1-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3",
+   "language": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from sklearn.decomposition import PCA\n",
+    "from sklearn.model_selection import train_test_split"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.read_csv(\"heart.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train, X_test, y_train, y_test = train_test_split(data.iloc[:,1:13], data.iloc[:,13:14], test_size=0.3, random_state=109)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pca = PCA()\n",
+    "pca.fit(X_train)\n",
+    "cumsum = np.cumsum(pca.explained_variance_ratio_)\n",
+    "d = np.argmax(cumsum >= 0.95) + 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pca = PCA(n_components=0.95)\n",
+    "X_reduced = pca.fit_transform(X_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "array([0.7616693 , 0.91220062, 0.99878571, 0.9991367 , 0.99943153,\n",
+       "       0.99966554, 0.99976103, 0.99983104, 0.99989102, 0.99993397,\n",
+       "       0.99997061, 1.        ])"
+      ]
+     },
+     "metadata": {},
+     "execution_count": 21
+    }
+   ],
+   "source": [
+    "cumsum"
+   ]
+  }
+ ]
+}
